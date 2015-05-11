@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(442, 224);
             this.Name = "ReaderWindow";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.ReaderWindow_Load);
             this.Shown += new System.EventHandler(this.ReaderWindow_Shown);
             this.ResumeLayout(false);
 

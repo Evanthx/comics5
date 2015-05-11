@@ -23,16 +23,21 @@ namespace Comic_Reader
             //Three parts.
             //First, read the ini files
             string htmlFile = File.ReadAllText("comic_in.htm");
-            string[] definitionFile = File.ReadAllLines("comics.ini");
-            string[] tokenFile = File.ReadAllLines("ComicSetup.ini");
+            string[] tokenFile = File.ReadAllLines("comics.ini");
 
             //Second, process the ini files to create the daily file
+            FileProcessor fileProcessor = new FileProcessor(htmlFile, tokenFile);
+            string resultFile = fileProcessor.processTheFiles();
 
             //Third, launch the default web browser on the daily file
-            File.WriteAllText("comic_out.htm", htmlFile);
+            File.WriteAllText("comic_out.htm", resultFile);
 
             Application.Exit();
             return;
+        }
+
+        private void ReaderWindow_Load(object sender, EventArgs e) {
+
         }
     }
 }
