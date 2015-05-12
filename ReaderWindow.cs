@@ -27,11 +27,12 @@ namespace Comic_Reader
 
             //Second, process the ini files to create the daily file
             FileProcessor fileProcessor = new FileProcessor(htmlFile, tokenFile);
-            string resultFile = fileProcessor.processTheFiles();
+            string resultFile = fileProcessor.processTheFiles(comicProgress);
 
             //Third, launch the default web browser on the daily file
             File.WriteAllText("comic_out.htm", resultFile);
 
+            System.Diagnostics.Process.Start("comic_out.htm");
             Application.Exit();
             return;
         }

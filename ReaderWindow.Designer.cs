@@ -28,15 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.comicProgress = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
+            // 
+            // comicProgress
+            // 
+            this.comicProgress.FormattingEnabled = true;
+            this.comicProgress.Location = new System.Drawing.Point(12, 12);
+            this.comicProgress.Name = "comicProgress";
+            this.comicProgress.Size = new System.Drawing.Size(358, 160);
+            this.comicProgress.TabIndex = 0;
             // 
             // ReaderWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(442, 224);
+            this.ClientSize = new System.Drawing.Size(385, 193);
+            this.Controls.Add(this.comicProgress);
             this.Name = "ReaderWindow";
-            this.Text = "Form1";
+            this.Text = "Comic Reader";
             this.Load += new System.EventHandler(this.ReaderWindow_Load);
             this.Shown += new System.EventHandler(this.ReaderWindow_Shown);
             this.ResumeLayout(false);
@@ -44,6 +54,8 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.ListBox comicProgress;
     }
 }
 

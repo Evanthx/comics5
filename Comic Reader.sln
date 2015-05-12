@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comic Reader", "Comic Reader.csproj", "{13232D67-0EA8-4CB2-BA08-CB5A8044DBC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComicUnitTester", "ComicUnitTester\ComicUnitTester.csproj", "{1072E0A2-B5C4-4DBC-9498-92782744B1FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{13232D67-0EA8-4CB2-BA08-CB5A8044DBC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13232D67-0EA8-4CB2-BA08-CB5A8044DBC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13232D67-0EA8-4CB2-BA08-CB5A8044DBC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1072E0A2-B5C4-4DBC-9498-92782744B1FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1072E0A2-B5C4-4DBC-9498-92782744B1FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1072E0A2-B5C4-4DBC-9498-92782744B1FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1072E0A2-B5C4-4DBC-9498-92782744B1FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using System.Windows.Forms;
 
 namespace Comic_Reader
 {
-    class FileProcessor
+    public class FileProcessor
     {
         private string htmlFile;
         private string[] tokenFile;
@@ -18,17 +19,17 @@ namespace Comic_Reader
             this.tokenFile = tokenFile;
         }
 
-        public string processTheFiles() {
+        public string processTheFiles(ListBox comicProgress) {
             //Walk the token file. For each line, see if that token exists in the html file. If it does - then
             //replace the token with data.
             foreach (string currentline in tokenFile) {
                 string[] tokens = currentline.Split('|');
-                processLine(tokens);
+                processLine(tokens, comicProgress);
             }
             return htmlFile;
         }
 
-        private void processLine(string[] tokens) {
+        private void processLine(string[] tokens, ListBox comicProgress) {
             if (tokens.Length != 3) {
                 //It's not what we expect ... ignore it.
                 return;
@@ -36,6 +37,8 @@ namespace Comic_Reader
 
             //Does this token exist inside the HTML file?
             if (htmlFile.Contains(tokens[0])) {
+                comicProgress.Items.Add(tokens[0]);
+                comicProgress.Refresh();
                 replaceToken(tokens);
             }
         }
