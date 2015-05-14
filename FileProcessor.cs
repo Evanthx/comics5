@@ -29,40 +29,40 @@ namespace Comic_Reader
             return htmlFile;
         }
 
-        private void processLine(string[] tokens, ListBox comicProgress) {
-            if (tokens.Length != 3) {
+        private void processLine(string[] tokenDefinition, ListBox comicProgress) {
+            if (tokenDefinition.Length != 3) {
                 //It's not what we expect ... ignore it.
                 return;
             }
 
             //Does this token exist inside the HTML file?
-            if (htmlFile.Contains(tokens[0])) {
-                comicProgress.Items.Add(tokens[0]);
+            if (htmlFile.Contains(tokenDefinition[0])) {
+                comicProgress.Items.Add(tokenDefinition[0]);
                 comicProgress.Refresh();
-                replaceToken(tokens);
+                string replacementToken = getToken(tokenDefinition);
+                htmlFile = htmlFile.Replace(tokenDefinition[0], replacementToken);
             }
         }
 
-        private void replaceToken(string[] tokens) {
+        public string getToken(string[] tokenDefinition) {
+            string theToken = string.Empty;
             try {
                 //Look up the token and get the value.
                 WebClient client = new WebClient();
-                string thepage = client.DownloadString(tokens[1]);
+                string thepage = client.DownloadString(tokenDefinition[1]);
 
                 //Great! We have the file. Now get the desired token out of it.
-                int location = thepage.IndexOf(tokens[2]);
+                int location = thepage.IndexOf(tokenDefinition[2]);
                 if (location == -1) {
-                    return;
+                    return string.Empty;
                 }
-                location = location + tokens[2].Length;
+                location = location + tokenDefinition[2].Length;
                 int endLocation = findEnd(thepage, location);
-               
-
-                string foundtoken = thepage.Substring(location, endLocation - location);
-                htmlFile = htmlFile.Replace(tokens[0], foundtoken);
+                theToken = thepage.Substring(location, endLocation - location);
             } catch (Exception e) {
-                return;
+                return string.Empty;
             }
+            return theToken;
         }
 
         private int findEnd(string thepage, int startlocation) {
