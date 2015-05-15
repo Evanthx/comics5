@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using Comic_Reader;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ComicUnitTester {
@@ -26,46 +27,83 @@ namespace ComicUnitTester {
         public void FindUnusedTokens() {
             foreach (string currentline in tokenFile) {
                 string[] tokens = currentline.Split('|');
-                if (tokens.Length == 3 && !definitionFile.Contains(tokens[0])) {
+                if (tokens.Length == 2 || tokens.Length > 4) {
+                    Assert.Fail("Misformatted token string! " + tokens[0]);
+                }
+
+                if (!definitionFile.Contains(tokens[0])) {
                     Assert.Fail("Unused token string! " + tokens[0]);
                     return;
                 }
 
-                if (tokens.Length == 2 || tokens.Length > 3) {
-                    Assert.Fail("Misformatted token string! " + tokens[0]);
-                }
             }
         }
 
         [TestMethod]
-        public void TestMethodGlobalCheck() {
+        public void DefinitionsLookOK() {
             //Not really a unit test but handy. Run all comics, and look for 404s.
             foreach (string currentDefinition in definitionFileList) {
                 string[] definition = currentDefinition.Split('|');
-                processLine(definition);
+                if (definition.Length != 3) {
+                    //It's not what we expect ... report it.
+                    string err = "Bad definition! ";
+                    if (definition.Length > 0) {
+                        err += definition[0];
+                    }
+                    Assert.Fail(err);
+                }
             }
         }
 
-        public void processLine(string[] definition) {
 
-            if (definition.Length != 3) {
-                //It's not what we expect ... report it.
-                string err = "Bad definition! ";
-                if (definition.Length > 0) {
-                    err += definition[0];
+        /**
+         * So this test is terrible and breaks every rule of testing I know about, but it's
+         * terribly useful.
+         * 
+         * Go to comics setup and activate every comic. Then run this test. Every comic that works
+         * will be turned off, meaning you're left looking at only broken links to fix.
+         * 
+         * Fix them, then run this again. It only checks turned on strips, and turns off any
+         * that are fixed - meaning you can just run this to find broken things, fix them,
+         * and iterate over that until everything works!
+         * 
+         * */
+        [TestMethod]
+        public void GlobalCheck() {
+            //Not really a unit test but handy. Run all comics, and look for 404s.
+            List<string> list = new List<string>();
+
+            foreach (string currentDefinition in definitionFileList) {
+                string[] definition = currentDefinition.Split('|');
+                //Only check ones that are active
+                if (definition[2].StartsWith("N")) {
+                    list.Add(string.Join("|", definition));
+                    continue;
                 }
-                Assert.Fail(err);
-                return;
+                Boolean worked = processLine(definition);
+                if (worked) {
+                    definition[2] = "N1";
+                } else {
+                    definition[2] = "Y1";
+                }
+                list.Add(string.Join("|", definition));
             }
+
+            //Now write the definitions back!
+            System.IO.File.WriteAllLines(@"C:\code\comics5\test\ComicSetup.ini", list);
+        }
+
+        public Boolean processLine(string[] definition) {
+
             string comicImage = definition[1];
             if (comicImage.IndexOf("img src") == -1) {
                 //This is a line with no image. That's fine, and expected, but has no work.
-                return;
+                return true;
             }
 
             foreach (string currentToken in tokenFile) {
                 string[] tokens = currentToken.Split('|');
-                if (tokens.Length != 3) {
+                if (tokens.Length != 3 && tokens.Length != 4) {
                     continue;
                 }
                 if (comicImage.Contains(tokens[0])) {
@@ -88,10 +126,11 @@ namespace ComicUnitTester {
                 WebClient client = new WebClient();
                 byte[] thepage = client.DownloadData(comicImage);
             } catch (WebException e) {
-                Assert.Fail("Did not get comic " + definition[0]);
+                System.Console.WriteLine("Did not get comic " + definition[0]);
+                return false;
             }
 
-
+            return true;
             // System.Console.WriteLine("Unused token string! " + tokens[0]);
         }
     }

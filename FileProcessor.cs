@@ -30,7 +30,7 @@ namespace Comic_Reader
         }
 
         private void processLine(string[] tokenDefinition, ListBox comicProgress) {
-            if (tokenDefinition.Length != 3) {
+            if (tokenDefinition.Length != 3 && tokenDefinition.Length != 4) {
                 //It's not what we expect ... ignore it.
                 return;
             }
@@ -57,7 +57,7 @@ namespace Comic_Reader
                     return string.Empty;
                 }
                 location = location + tokenDefinition[2].Length;
-                int endLocation = findEnd(thepage, location);
+                int endLocation = findEnd(tokenDefinition, thepage, location);
                 theToken = thepage.Substring(location, endLocation - location);
             } catch (Exception e) {
                 return string.Empty;
@@ -65,7 +65,11 @@ namespace Comic_Reader
             return theToken;
         }
 
-        private int findEnd(string thepage, int startlocation) {
+        private int findEnd(string[] tokenDefinition, string thepage, int startlocation) {
+            int definitiveLocation = -1;
+            if (tokenDefinition.Length == 4) {
+                return thepage.IndexOf(tokenDefinition[3], startlocation);
+            }
             int endLocation1 = thepage.IndexOf('.', startlocation);
             int endLocation2 = thepage.IndexOf('\"', startlocation);
             int endLocation3 = thepage.IndexOf('\'', startlocation);
