@@ -47,6 +47,7 @@ namespace ComicUnitTester {
         }
 
         public void processLine(string[] definition) {
+
             if (definition.Length != 3) {
                 //It's not what we expect ... report it.
                 string err = "Bad definition! ";
@@ -56,26 +57,38 @@ namespace ComicUnitTester {
                 Assert.Fail(err);
                 return;
             }
+            string comicImage = definition[1];
+            if (comicImage.IndexOf("img src") == -1) {
+                //This is a line with no image. That's fine, and expected, but has no work.
+                return;
+            }
 
             foreach (string currentToken in tokenFile) {
                 string[] tokens = currentToken.Split('|');
                 if (tokens.Length != 3) {
                     continue;
                 }
-                if (definition[1].Contains(tokens[0])) {
+                if (comicImage.Contains(tokens[0])) {
                     string resultToken = fileProcessor.getToken(tokens);
-                    string comicImage = definition[1].Replace(tokens[0], resultToken);
-                    int loc = comicImage.IndexOf("img src");
-                    loc = comicImage.IndexOf("http", loc);
-                    int endLoc = comicImage.IndexOf("\">", loc);
-                    comicImage = comicImage.Substring(loc, endLoc - loc);
-                    try {
-                        WebClient client = new WebClient();
-                        byte[] thepage = client.DownloadData(comicImage);
-                    } catch (WebException e) {
-                        Assert.Fail("Did not get comic " + definition[0]);
-                    }
+                    comicImage = comicImage.Replace(tokens[0], resultToken);
                 }
+            }
+
+            //All tokens processed...now get the file!
+            int loc = comicImage.IndexOf("img src");
+            Assert.IsTrue(loc >= 0, "Bad line for " + definition[0]);
+            loc = comicImage.IndexOf("http", loc);
+            Assert.IsTrue(loc >= 0, "Bad line continuation for " + definition[0]);
+
+            int endLoc = comicImage.IndexOf("\"", loc);
+            Assert.IsTrue(loc >= 0, "Bad end line for " + definition[0]);
+
+            comicImage = comicImage.Substring(loc, endLoc - loc);
+            try {
+                WebClient client = new WebClient();
+                byte[] thepage = client.DownloadData(comicImage);
+            } catch (WebException e) {
+                Assert.Fail("Did not get comic " + definition[0]);
             }
 
 
