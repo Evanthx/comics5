@@ -26,7 +26,34 @@ namespace Comic_Reader
                 string[] tokens = currentline.Split('|');
                 processLine(tokens, comicProgress);
             }
-            return htmlFile;
+
+            //Walk the html file and look for special tokens.
+            string[] splitHtml = htmlFile.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+            StringBuilder sb = new StringBuilder();
+            foreach (string currentline in splitHtml) {
+                sb.Append(processHtmlLine(currentline));
+                sb.Append(Environment.NewLine);
+            }
+            return sb.ToString();
+        }
+
+        public string processHtmlLine(string definition) {
+            int loc = definition.IndexOf("GOCOMIC");
+            if (loc == -1) {
+                return definition;
+            }
+
+            //Parse out the page.
+            const string HTML_LOC = "href=\"";
+            int pageLoc = definition.IndexOf(HTML_LOC);
+            pageLoc += HTML_LOC.Length;
+            int endLoc = definition.IndexOf("\"", pageLoc);
+
+            string token = getToken(new string[] { "GOCOMIC", definition.Substring(pageLoc, endLoc - pageLoc), "http://assets.amuniversal.com/" });
+            token = "http://assets.amuniversal.com/" + token;
+            definition = definition.Replace("GOCOMIC", token);
+
+            return definition;
         }
 
         private void processLine(string[] tokenDefinition, ListBox comicProgress) {
@@ -45,6 +72,7 @@ namespace Comic_Reader
         }
 
         public string getToken(string[] tokenDefinition) {
+           
             string theToken = string.Empty;
             try {
                 //Look up the token and get the value.

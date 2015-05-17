@@ -112,11 +112,13 @@ namespace ComicUnitTester {
                 }
             }
 
+            //Check for special tokens ...
+            comicImage = fileProcessor.processHtmlLine(comicImage);
+
             //All tokens processed...now get the file!
-            int loc = comicImage.IndexOf("img src");
+            int loc = comicImage.IndexOf("img src=\"");
             Assert.IsTrue(loc >= 0, "Bad line for " + definition[0]);
-            loc = comicImage.IndexOf("http", loc);
-            Assert.IsTrue(loc >= 0, "Bad line continuation for " + definition[0]);
+            loc += 9;
 
             int endLoc = comicImage.IndexOf("\"", loc);
             Assert.IsTrue(loc >= 0, "Bad end line for " + definition[0]);
