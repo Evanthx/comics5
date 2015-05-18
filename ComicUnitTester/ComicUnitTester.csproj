@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Comic Reader.csproj">
+    <ProjectReference Include="..\ComicReader\Comic Reader.csproj">
       <Project>{13232d67-0ea8-4cb2-ba08-cb5a8044dbc4}</Project>
       <Name>Comic Reader</Name>
     </ProjectReference>

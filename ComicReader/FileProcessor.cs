@@ -94,7 +94,6 @@ namespace Comic_Reader
         }
 
         private int findEnd(string[] tokenDefinition, string thepage, int startlocation) {
-            int definitiveLocation = -1;
             if (tokenDefinition.Length == 4) {
                 return thepage.IndexOf(tokenDefinition[3], startlocation);
             }
