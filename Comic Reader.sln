@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComicUnitTester", "ComicUni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comic Reader", "ComicReader\Comic Reader.csproj", "{13232D67-0EA8-4CB2-BA08-CB5A8044DBC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", "..\WindowsFormsApplication1\WindowsFormsApplication1.csproj", "{CBF05610-1299-437B-BBB7-5D0A2DEC91CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comic Setup", "ComicSetup\Comic Setup.csproj", "{CBF05610-1299-437B-BBB7-5D0A2DEC91CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
